@@ -1,0 +1,18 @@
+[
+  {
+    "modid": "alchemycraft",
+    "name": "AlchemyCraft",
+    "description": "An alchemy mod to transmute your materials.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": [
+      "MathRoze"
+    ],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]
