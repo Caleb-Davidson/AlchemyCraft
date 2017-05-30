@@ -1,6 +1,6 @@
 package xyz.mathroze.tileentity;
 
-import net.minecraft.block.BlockCauldron;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -8,6 +8,8 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
@@ -17,6 +19,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import xyz.mathroze.alchemycraft.References;
+import xyz.mathroze.blocks.BlockAlchemicBasin;
 import xyz.mathroze.utils.Log;
 
 /**
@@ -25,25 +28,29 @@ import xyz.mathroze.utils.Log;
 public class TileEntityAlchemicBasin extends TileEntity implements ITickable, ICapabilityProvider {
 
     public static final String TILE_ENTITY_ID = References.MOD_ID + ":alchemicBasin";
-    private int progress;
+
     private static String NBT_PROGRESS = "Progress";
     private static String NBT_TANK = "Tank";
-    private FluidTank fluidTank;
-   // @CapabilityInject(IFluidHandler.class)
-   // private Capability<IFluidHandler> FLUID_HANDLER_CAPABILITY = null;
 
-    public TileEntityAlchemicBasin() {
+    private int progress;
+    private FluidTank fluidTank;
+    private BlockAlchemicBasin parentBlock;
+
+    public TileEntityAlchemicBasin(BlockAlchemicBasin parentBlock) {
         this.progress = 0;
         this.fluidTank = new FluidTank(10000);
+        this.parentBlock = parentBlock;
     }
 
     @Override
     public void update() {
         progress = (progress + 1) % 100;
-        //Log.verbose("TileEntityAlchemicBasin progress: " + progress);
+//        Log.verbose("I've been updated!");
     }
 
-    public void interact(EntityPlayer player) {
+    public void interact(EntityPlayer player, World world, BlockPos pos) {
+        if (world.isRemote)
+            return;
         Log.verbose("Checking for capability");
         IFluidHandler capability;
         if (player.getHeldItemMainhand() != null && player.getHeldItemMainhand().hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null))
@@ -63,6 +70,7 @@ public class TileEntityAlchemicBasin extends TileEntity implements ITickable, IC
                     Log.verbose("Performing Drain");
                     capability.fill(fluidTank.drain(1000, true), true);
                     Log.verbose("FluidTank now at " + fluidTank.getFluidAmount() + " / " + fluidTank.getCapacity());
+                    setParentBlockState(world, pos, fluidTank.getFluidAmount() / 1000);
                     markDirty();
                 }
             }
@@ -74,11 +82,17 @@ public class TileEntityAlchemicBasin extends TileEntity implements ITickable, IC
                     if (fluid.amount == 1000 && fluidTank.getFluidAmount() + fluid.amount <= fluidTank.getCapacity()) {
                         fluidTank.fill(capability.drain(1000, true), true);
                         Log.verbose("FluidTank now at " + fluidTank.getFluidAmount() + " / " + fluidTank.getCapacity() + "mb");
+                        setParentBlockState(world, pos, fluidTank.getFluidAmount() / 1000);
                         markDirty();
                     }
                 }
             }
         }
+    }
+
+    private void setParentBlockState(World world, BlockPos pos, int state) {
+        Log.verbose("Setting parentBlock: " + parentBlock.getUnlocalizedName() + " at position " + pos.toString() + " to state " + state);
+        world.setBlockState(pos, parentBlock.getDefaultState().withProperty(parentBlock.LEVEL, state));
     }
 
     @Override
@@ -152,5 +166,10 @@ public class TileEntityAlchemicBasin extends TileEntity implements ITickable, IC
         NBTTagCompound nbt = new NBTTagCompound();
         this.writeToNBT(nbt);
         return nbt;
+    }
+
+    @Override
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
+        return oldState.getBlock() != newSate.getBlock() || oldState == newSate;
     }
 }

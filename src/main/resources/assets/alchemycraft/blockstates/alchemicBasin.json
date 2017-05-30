@@ -1,7 +1,15 @@
 {
   "variants": {
-    "normal": {
-      "model": "alchemycraft:alchemicBasin"
-    }
+    "level=0": { "model": "alchemycraft:alchemicBasin_empty" },
+    "level=1": { "model": "alchemycraft:alchemicBasin_level1" },
+    "level=2": { "model": "alchemycraft:alchemicBasin_level2" },
+    "level=3": { "model": "alchemycraft:alchemicBasin_level3" },
+    "level=4": { "model": "alchemycraft:alchemicBasin_level4" },
+    "level=5": { "model": "alchemycraft:alchemicBasin_level5" },
+    "level=6": { "model": "alchemycraft:alchemicBasin_level6" },
+    "level=7": { "model": "alchemycraft:alchemicBasin_level7" },
+    "level=8": { "model": "alchemycraft:alchemicBasin_level8" },
+    "level=9": { "model": "alchemycraft:alchemicBasin_level9" },
+    "level=10": { "model": "alchemycraft:alchemicBasin_level10" }
   }
 }

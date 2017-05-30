@@ -6,6 +6,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import xyz.mathroze.init.Blocks;
+import xyz.mathroze.init.Items;
 import xyz.mathroze.proxy.CommonProxy;
 import xyz.mathroze.utils.Log;
 
@@ -36,6 +37,11 @@ public class AlchemyCraft {
         Blocks.init();
         Log.verbose("Registering Blocks");
         Blocks.registerBlocks();
+
+        Log.verbose("Initializing Items");
+        Items.init();
+        Log.verbose("Registering Items");
+        Items.registerItems();
 
         Log.verbose("Registering Renders");
         proxy.registerRenders();

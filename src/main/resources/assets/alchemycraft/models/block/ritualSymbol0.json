@@ -1,0 +1,6 @@
+{
+  "parent": "alchemycraft:block/ritualSymbol",
+  "textures": {
+    "symbol": "alchemycraft:blocks/ritualSymbol0"
+  }
+}

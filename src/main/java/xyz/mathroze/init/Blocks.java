@@ -11,6 +11,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import xyz.mathroze.alchemycraft.References;
 import xyz.mathroze.blocks.BlockAlchemicBasin;
+import xyz.mathroze.blocks.BlockRitualSymbol;
 import xyz.mathroze.utils.Log;
 
 /**
@@ -19,15 +20,18 @@ import xyz.mathroze.utils.Log;
 public class Blocks {
 
     public static Block blockAlchemicBasin;
+    public static Block blockRitualSymbol;
 
     public static void init() {
         Log.debug("Initializing Blocks");
         blockAlchemicBasin = new BlockAlchemicBasin("alchemicBasin");
+        blockRitualSymbol = new BlockRitualSymbol("ritualSymbol");
     }
 
     public static void registerBlocks() {
         Log.debug("Registering Blocks");
         registerBlock(blockAlchemicBasin);
+        registerBlock(blockRitualSymbol);
     }
 
     private static void registerBlock(Block block) {
@@ -40,6 +44,7 @@ public class Blocks {
     public static void registerRenders() {
         Log.debug("Registering Block Renders");
         registerRender(blockAlchemicBasin);
+        registerRender(blockRitualSymbol);
     }
 
     @SideOnly(Side.CLIENT)

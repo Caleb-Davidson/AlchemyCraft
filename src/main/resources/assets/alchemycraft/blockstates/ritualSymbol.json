@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "normal": [
+        { "model": "alchemycraft:ritualSymbol0" },
+        { "model": "alchemycraft:ritualSymbol1" },
+        { "model": "alchemycraft:ritualSymbol2" },
+        { "model": "alchemycraft:ritualSymbol3" }
+      ]
+  }
+}
