@@ -15,6 +15,6 @@ public class ClientProxy extends CommonProxy {
     @SideOnly(Side.CLIENT)
     public void registerRenders() {
         Blocks.registerRenders();
-        Items.RegisterRenders();
+        Items.registerRenders();
     }
 }

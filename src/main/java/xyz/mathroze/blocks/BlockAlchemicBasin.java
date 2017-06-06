@@ -69,7 +69,9 @@ public class BlockAlchemicBasin extends Block implements ITileEntityProvider {
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileEntityAlchemicBasin(this);
+        TileEntityAlchemicBasin entity = new TileEntityAlchemicBasin();
+        //entity.setParentBlock(this);
+        return entity;
     }
 
     @Override

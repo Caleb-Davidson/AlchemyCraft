@@ -8,6 +8,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import xyz.mathroze.alchemycraft.References;
+import xyz.mathroze.items.ItemPhilosophersStone;
 import xyz.mathroze.items.ItemRitualChalk;
 import xyz.mathroze.utils.Log;
 
@@ -16,14 +17,17 @@ import xyz.mathroze.utils.Log;
  */
 public class Items {
 
-    public static Item itemChalk;
+    public static Item itemRitualChalk;
+    public static Item itemPhilosophersStone;
 
     public static void init() {
-        itemChalk = new ItemRitualChalk("ritualChalk");
+        itemRitualChalk = new ItemRitualChalk("ritualChalk");
+        itemPhilosophersStone = new ItemPhilosophersStone("philosophersStone");
     }
 
     public static void registerItems() {
-        registerItem(itemChalk);
+        registerItem(itemRitualChalk);
+        registerItem(itemPhilosophersStone);
     }
 
     private static void registerItem(Item item) {
@@ -32,8 +36,9 @@ public class Items {
     }
 
     @SideOnly(Side.CLIENT)
-    public static void RegisterRenders() {
-        registerRender(itemChalk);
+    public static void registerRenders() {
+        registerRender(itemRitualChalk);
+        registerRender(itemPhilosophersStone);
     }
 
     @SideOnly(Side.CLIENT)
