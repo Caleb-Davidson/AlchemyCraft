@@ -40,6 +40,9 @@ public class BlockAlchemicBasin extends Block implements ITileEntityProvider {
         Log.verbose("Initializing BlockAlchemicBasin with unlocalized name: " + unlocalizedName);
         this.setUnlocalizedName(unlocalizedName);
         this.setRegistryName(new ResourceLocation(References.MOD_ID, unlocalizedName));
+        this.setHardness(2);
+        this.setResistance(10);
+        this.setHarvestLevel("pickaxe", 0);
     }
 
     @Override

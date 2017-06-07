@@ -1,11 +1,13 @@
 package xyz.mathroze.alchemycraft;
 
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import xyz.mathroze.init.Blocks;
+import xyz.mathroze.init.Fluids;
 import xyz.mathroze.init.Items;
 import xyz.mathroze.proxy.CommonProxy;
 import xyz.mathroze.utils.Log;
@@ -22,6 +24,9 @@ public class AlchemyCraft {
             clientSide = References.CLIENT_PROXY_CLASS
     )
     static CommonProxy proxy;
+    static {
+        FluidRegistry.enableUniversalBucket(); // Must be called before preInit
+    }
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -32,6 +37,9 @@ public class AlchemyCraft {
                 "**************************************");
 
         Log.debug("Beginning pre-init phase");
+
+        Log.verbose("Initializing Fluids");
+        Fluids.register();
 
         Log.verbose("Initializing Blocks");
         Blocks.init();

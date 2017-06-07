@@ -7,6 +7,9 @@ import net.minecraftforge.fluids.FluidStack;
  */
 public class RitualNone extends Ritual {
 
+    RitualNone() {
+        super(0, 0, null, null, true, null, null);
+    }
 
     @Override
     public boolean canProceed(FluidStack fluid) {

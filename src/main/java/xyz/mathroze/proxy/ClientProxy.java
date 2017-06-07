@@ -3,6 +3,7 @@ package xyz.mathroze.proxy;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import xyz.mathroze.init.Blocks;
+import xyz.mathroze.init.Fluids;
 import xyz.mathroze.init.Items;
 
 /**
@@ -14,6 +15,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     @SideOnly(Side.CLIENT)
     public void registerRenders() {
+        Fluids.registerModels();
         Blocks.registerRenders();
         Items.registerRenders();
     }

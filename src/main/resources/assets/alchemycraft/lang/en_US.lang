@@ -1,3 +1,9 @@
 tile.alchemicBasin.name=Alchemic Basin
+tile.ritualSymbol.name=Ritual Symbol
+tile.blockAlchemicSlurry.name=Alchemic Slurry
+tile.plantFiber.name=Plant Fiber
+
 item.ritualChalk.name=Ritual Chalk
 item.philosophersStone.name=Philosophers Stone
+
+fluid.alchemicSlurry=Alchemic Slurry

@@ -1,7 +1,5 @@
 package xyz.mathroze.tileentity;
 
-import com.google.gson.Gson;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,7 +13,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -60,17 +57,21 @@ public class TileEntityAlchemicBasin extends TileEntity implements ITickable, IC
     @Override
     public void update() {
         if (ritual.canProceed(fluidTank.getFluid())) /* Ritual is proceeding */ {
-            progress = (progress + 1) % ritual.transformationTicks;
-            Log.verbose("Ritual is proceeding: " + progress + "/" + ritual.transformationTicks);
-            spawnParticles((float) progress / ritual.transformationTicks);
-            fluidTank.drain(ritual.drainAmount, true);
-            if (!world.isRemote && (fluidTank.getFluidAmount() + ritual.drainAmount % 1000) == 0) {
+            progress = (progress + 1) % ritual.getTransformationTicks();
+            Log.verbose("Ritual is proceeding: " + progress + "/" + ritual.getTransformationTicks());
+            spawnParticles((float) progress / ritual.getTransformationTicks());
+            fluidTank.drain(ritual.getDrainAmount(), true);
+            if (!world.isRemote && (fluidTank.getFluidAmount() + ritual.getDrainAmount() % 1000) == 0) {
                 setParentBlockState(world, pos, fluidTank.getFluidAmount() / 1000);
                 markDirty();
             }
             if (progress == 0) {
-                if (!world.isRemote)
-                    world.setBlockState(pos.up(), ritual.endResult.getDefaultState());
+                if (!world.isRemote) {
+                    world.setBlockState(pos.up(), ritual.getEndBlockResult().getDefaultState());
+                    if (!ritual.isBlockInfusion()) {
+                        fluidTank.setFluid(new FluidStack(ritual.getEndFluidResult(), fluidTank.getFluidAmount()));
+                    }
+                }
                 ritual = RitualFactory.getRitual(null);
             }
         } else if (progress != 0) /* Ritual was cancelled */ {
