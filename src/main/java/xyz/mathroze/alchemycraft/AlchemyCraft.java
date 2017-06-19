@@ -6,11 +6,13 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import xyz.mathroze.init.Blocks;
-import xyz.mathroze.init.Fluids;
-import xyz.mathroze.init.Items;
-import xyz.mathroze.proxy.CommonProxy;
-import xyz.mathroze.utils.Log;
+import net.minecraftforge.fml.common.network.FMLEventChannel;
+import net.minecraftforge.fml.relauncher.Side;
+import xyz.mathroze.alchemycraft.init.*;
+import xyz.mathroze.alchemycraft.network.AlchemyCraftPacketHandler;
+import xyz.mathroze.alchemycraft.network.UpdateAlchemicBasinMessage;
+import xyz.mathroze.alchemycraft.proxy.CommonProxy;
+import xyz.mathroze.alchemycraft.utils.Log;
 
 @Mod(
         modid = References.MOD_ID,
@@ -55,10 +57,13 @@ public class AlchemyCraft {
         proxy.registerRenders();
         Log.verbose("Registering Tile Entities");
         proxy.registerTileEntities();
+
+        OreDictionaries.registerOreDictionaries();
     }
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-
+        Recipes.registerCraftingRecipes();
+        AlchemyCraftPacketHandler.INSTANCE.registerMessage(UpdateAlchemicBasinMessage.UpdateAlchemicBasinMessageHandler.class, UpdateAlchemicBasinMessage.class, 0, Side.CLIENT);
     }
 }
