@@ -42,9 +42,14 @@ repositories {
         name = "ModMaven"
         url = "modmaven.k-4u.nl"
     }
+    maven { // The repo from which to get waila
+        name "Mobius Repo"
+        url "http://mobiusstrip.eu/maven"
+    }
 }
 
 dependencies {
+    compile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4"
     // compile against the JEI API
     deobfCompile "mezz.jei:jei_${mc_version}:${jei_version}:api"
     // at runtime, use the full JEI jar

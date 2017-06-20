@@ -1,10 +1,9 @@
-package xyz.mathroze.alchemycraft.jei.rituals;
+package xyz.mathroze.alchemycraft.plugins.jei.rituals;
 
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
-import xyz.mathroze.alchemycraft.rituals.Ritual;
 import xyz.mathroze.alchemycraft.rituals.RitualRecipe;
 
 import java.util.ArrayList;

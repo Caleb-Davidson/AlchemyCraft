@@ -1,4 +1,4 @@
-package xyz.mathroze.alchemycraft.jei.rituals;
+package xyz.mathroze.alchemycraft.plugins.jei.rituals;
 
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;

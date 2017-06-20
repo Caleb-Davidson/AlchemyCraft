@@ -57,6 +57,8 @@ public class AlchemyCraft {
         proxy.registerRenders();
         Log.verbose("Registering Tile Entities");
         proxy.registerTileEntities();
+        Log.verbose("Registering Plugins");
+        proxy.registerPlugins();
 
         OreDictionaries.registerOreDictionaries();
     }

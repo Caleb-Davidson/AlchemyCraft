@@ -1,13 +1,10 @@
-package xyz.mathroze.alchemycraft.jei.rituals;
+package xyz.mathroze.alchemycraft.plugins.jei.rituals;
 
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeCategory;
-import mezz.jei.api.recipe.IRecipeWrapper;
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import xyz.mathroze.alchemycraft.References;
 

@@ -21,18 +21,24 @@ public class UpdateAlchemicBasinMessage implements IMessage {
 
     private BlockPos pos;
     private FluidStack fluidStack;
+    private boolean nullFluid;
+
     public UpdateAlchemicBasinMessage(FluidStack fluidStack, BlockPos pos) {
         this.fluidStack = fluidStack;
         this.pos = pos;
+        this.nullFluid = fluidStack == null;
     }
 
     @Override public void toBytes(ByteBuf buf) {
         buf.writeInt(pos.getX());
         buf.writeInt(pos.getY());
         buf.writeInt(pos.getZ());
-        NBTTagCompound fluidTag = new NBTTagCompound();
-        fluidStack.writeToNBT(fluidTag);
-        ByteBufUtils.writeTag(buf, fluidTag);
+        buf.writeBoolean(nullFluid);
+        if (!nullFluid) {
+            NBTTagCompound fluidTag = new NBTTagCompound();
+            fluidStack.writeToNBT(fluidTag);
+            ByteBufUtils.writeTag(buf, fluidTag);
+        }
     }
 
     @Override public void fromBytes(ByteBuf buf) {
@@ -41,7 +47,9 @@ public class UpdateAlchemicBasinMessage implements IMessage {
                 buf.readInt(),
                 buf.readInt()
         );
-        fluidStack = FluidStack.loadFluidStackFromNBT(ByteBufUtils.readTag(buf));
+        nullFluid = buf.readBoolean();
+        if (!nullFluid)
+            fluidStack = FluidStack.loadFluidStackFromNBT(ByteBufUtils.readTag(buf));
     }
 
     @SideOnly(Side.CLIENT)
@@ -49,11 +57,15 @@ public class UpdateAlchemicBasinMessage implements IMessage {
         @Override public IMessage onMessage(UpdateAlchemicBasinMessage message, MessageContext ctx) {
             final FluidStack fluidStack = message.fluidStack;
             final BlockPos pos = message.pos;
+            final boolean nullFluid = message.nullFluid;
             Minecraft.getMinecraft().addScheduledTask(new Runnable() {
                 @Override
                 public void run() {
                     TileEntityAlchemicBasin te = (TileEntityAlchemicBasin)Minecraft.getMinecraft().world.getTileEntity(pos);
-                    te.fluidTank.setFluid(fluidStack);
+                    if (nullFluid)
+                        te.fluidTank.setFluid(null);
+                    else
+                        te.fluidTank.setFluid(fluidStack);
                 }
             });
             // No response packet

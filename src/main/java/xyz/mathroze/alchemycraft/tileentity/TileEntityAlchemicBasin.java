@@ -228,4 +228,12 @@ public class TileEntityAlchemicBasin extends TileEntity implements ITickable, IC
     private int remainingCapacity() {
         return CAPACITY - fluidTank.getFluidAmount();
     }
+
+    public float ritualProgress() {
+        return ((float)progress / ritual.getTransformationTicks()) * 100;
+    }
+
+    public boolean ritualInProgress() {
+        return progress != 0;
+    }
 }

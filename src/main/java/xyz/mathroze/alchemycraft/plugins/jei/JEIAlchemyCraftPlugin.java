@@ -1,4 +1,4 @@
-package xyz.mathroze.alchemycraft.jei;
+package xyz.mathroze.alchemycraft.plugins.jei;
 
 import mezz.jei.api.BlankModPlugin;
 import mezz.jei.api.IJeiHelpers;
@@ -8,8 +8,8 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import xyz.mathroze.alchemycraft.References;
 import xyz.mathroze.alchemycraft.init.Blocks;
-import xyz.mathroze.alchemycraft.jei.rituals.RitualRecipeCategory;
-import xyz.mathroze.alchemycraft.jei.rituals.RitualRecipeHandler;
+import xyz.mathroze.alchemycraft.plugins.jei.rituals.RitualRecipeCategory;
+import xyz.mathroze.alchemycraft.plugins.jei.rituals.RitualRecipeHandler;
 import xyz.mathroze.alchemycraft.rituals.RitualFactory;
 import xyz.mathroze.alchemycraft.rituals.RitualRecipe;
 
