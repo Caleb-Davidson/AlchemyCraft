@@ -18,7 +18,6 @@ public class RitualRecipeCategory extends BlankRecipeCategory<RitualRecipeWrappe
 
     static IDrawable background;
     static IDrawableAnimated arrow;
-//    static IDrawable fluidOverlay;
 
     public RitualRecipeCategory(IGuiHelper guiHelper) {
         background = guiHelper.createDrawable(new ResourceLocation(References.MOD_ID, "textures/gui/jei_ritual.png"),
@@ -26,10 +25,6 @@ public class RitualRecipeCategory extends BlankRecipeCategory<RitualRecipeWrappe
         IDrawableStatic drawableArrow = guiHelper.createDrawable(new ResourceLocation(References.MOD_ID, "textures/gui/jei_ritual.png"),
                 135, 0, 18, 18);
         arrow = guiHelper.createAnimatedDrawable(drawableArrow, 30, IDrawableAnimated.StartDirection.LEFT, false);
-//        background = guiHelper.createDrawable(new ResourceLocation("minecraft", "textures/gui/container/furnace.png"),
-//                5, 5, 165, 75);
-//        fluidOverlay = guiHelper.createDrawable(new ResourceLocation("minecraft", "textures/gui/container/enchanting_table.png"),
-//                80, 14, 20, 60);
     }
 
     @Override
