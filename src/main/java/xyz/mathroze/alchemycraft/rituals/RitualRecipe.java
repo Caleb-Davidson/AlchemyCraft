@@ -12,14 +12,16 @@ public class RitualRecipe {
     public ItemStack inputItemStackTwo;
     public FluidStack inputFluidStack;
     public ItemStack outputItemStack;
-//    public FluidStack outputFluidStack;
+    public FluidStack outputFluidStack;
+    public boolean isFluidInfusion;
 
     public RitualRecipe(Ritual ritual) {
-        inputItemStackOne = new ItemStack(ritual.blockArea.getBlockAt(0, 1, 0));
-        inputItemStackTwo = new ItemStack(ritual.blockArea.getBlockAt(0, -1, 0));
-        inputFluidStack = ritual.getNeededFluid();
-        outputItemStack = new ItemStack(ritual.getEndBlockResult());
-
-//        outputFluidStack = new FluidStack(ritual.getEndFluidResult(), 0);
+        inputItemStackOne = new ItemStack(ritual.ritualBlocks.getBlockAt(0, 1, 0));
+        inputItemStackTwo = new ItemStack(ritual.ritualBlocks.getBlockAt(0, -1, 0));
+        inputFluidStack = ritual.neededFluid;
+        outputItemStack = new ItemStack(ritual.endBlockResult);
+        if (ritual.endFluidResult != null)
+            outputFluidStack = new FluidStack(ritual.endFluidResult, 1);
+        isFluidInfusion = ritual.isFluidInfusion;
     }
 }

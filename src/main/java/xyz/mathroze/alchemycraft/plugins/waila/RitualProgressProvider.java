@@ -9,7 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import xyz.mathroze.alchemycraft.tileentity.TileEntityAlchemicBasin;
+import xyz.mathroze.alchemycraft.rituals.RitualEpicenters;
 
 import java.util.List;
 
@@ -29,11 +29,9 @@ public class RitualProgressProvider implements IWailaDataProvider {
 
     @Override
     public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
-        if(accessor.getTileEntity() instanceof TileEntityAlchemicBasin) {
-            TileEntityAlchemicBasin te = (TileEntityAlchemicBasin) accessor.getTileEntity();
-            if (te.ritualInProgress()) {
-                currenttip.add("Ritual Progress: " + String.format("%.0f%%", te.ritualProgress()));
-            }
+        Float percentage = RitualEpicenters.map.get(accessor.getPosition());
+        if(percentage != null && percentage != 0) {
+            currenttip.add("Ritual Progress: " + String.format("%.0f%%", percentage));
         }
         return currenttip;
     }

@@ -28,8 +28,10 @@ public class RitualRecipeWrapper extends BlankRecipeWrapper {
         list.add(theRecipe.inputItemStackTwo);
         ingredients.setInputs(ItemStack.class, list);
         ingredients.setInput(FluidStack.class, theRecipe.inputFluidStack);
-//        if (theRecipe.outputItemStack != null)
+        if (theRecipe.outputItemStack.getItem() != null)
             ingredients.setOutput(ItemStack.class, theRecipe.outputItemStack);
+        if (theRecipe.isFluidInfusion)
+            ingredients.setOutput(FluidStack.class, theRecipe.outputFluidStack);
 //        else
 //            ingredients.setOutput(FluidStack.class, theRecipe.outputFluidStack);
     }

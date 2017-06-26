@@ -2,9 +2,12 @@ package xyz.mathroze.alchemycraft.plugins.jei.rituals;
 
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
+import mezz.jei.api.gui.IDrawableAnimated;
+import mezz.jei.api.gui.IDrawableStatic;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeCategory;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import xyz.mathroze.alchemycraft.References;
 
@@ -14,13 +17,19 @@ import xyz.mathroze.alchemycraft.References;
 public class RitualRecipeCategory extends BlankRecipeCategory<RitualRecipeWrapper> {
 
     static IDrawable background;
-    static IDrawable fluidOverlay;
+    static IDrawableAnimated arrow;
+//    static IDrawable fluidOverlay;
 
     public RitualRecipeCategory(IGuiHelper guiHelper) {
-        background = guiHelper.createDrawable(new ResourceLocation("minecraft", "textures/gui/container/furnace.png"),
-                5, 5, 165, 75);
-        fluidOverlay = guiHelper.createDrawable(new ResourceLocation("minecraft", "textures/gui/container/enchanting_table.png"),
-                80, 14, 20, 60);
+        background = guiHelper.createDrawable(new ResourceLocation(References.MOD_ID, "textures/gui/jei_ritual.png"),
+              0, 0, 135, 65, 0, 0, 0, 0);
+        IDrawableStatic drawableArrow = guiHelper.createDrawable(new ResourceLocation(References.MOD_ID, "textures/gui/jei_ritual.png"),
+                135, 0, 18, 18);
+        arrow = guiHelper.createAnimatedDrawable(drawableArrow, 30, IDrawableAnimated.StartDirection.LEFT, false);
+//        background = guiHelper.createDrawable(new ResourceLocation("minecraft", "textures/gui/container/furnace.png"),
+//                5, 5, 165, 75);
+//        fluidOverlay = guiHelper.createDrawable(new ResourceLocation("minecraft", "textures/gui/container/enchanting_table.png"),
+//                80, 14, 20, 60);
     }
 
     @Override
@@ -39,17 +48,31 @@ public class RitualRecipeCategory extends BlankRecipeCategory<RitualRecipeWrappe
     }
 
     @Override
+    public void drawAnimations(Minecraft minecraft) {
+        arrow.draw(minecraft, 58, 24);
+    }
+
+    @Override
     public void setRecipe(IRecipeLayout recipeLayout, RitualRecipeWrapper recipeWrapper, IIngredients ingredients) {
-        recipeLayout.getItemStacks().init(0, true, 50, 12);
+        recipeLayout.getItemStacks().init(0, true, 40, 5);
         recipeLayout.getItemStacks().set(0, recipeWrapper.theRecipe.inputItemStackOne);
 
-        recipeLayout.getItemStacks().init(1, true, 50, 48);
+        recipeLayout.getItemStacks().init(1, true, 40, 42);
         recipeLayout.getItemStacks().set(1, recipeWrapper.theRecipe.inputItemStackTwo);
 
-        recipeLayout.getFluidStacks().init(2, true, 10, 5, 20, 60, 10000, true, null);
+        recipeLayout.getFluidStacks().init(2, true, 6, 6, 18, 53, 1, false, null);
         recipeLayout.getFluidStacks().set(2, recipeWrapper.theRecipe.inputFluidStack);
 
-        recipeLayout.getItemStacks().init(3, false, 110, 29);
-        recipeLayout.getItemStacks().set(3, recipeWrapper.theRecipe.outputItemStack);
+        if (recipeWrapper.theRecipe.outputItemStack.getItem() != null) {
+            recipeLayout.getItemStacks().init(3, false, 77, 24);
+            recipeLayout.getItemStacks().set(3, recipeWrapper.theRecipe.outputItemStack);
+        }
+
+        if (recipeWrapper.theRecipe.isFluidInfusion) {
+            recipeLayout.getFluidStacks().init(4, false, 111, 6, 18, 53, 1, false, null);
+            recipeLayout.getFluidStacks().set(4, recipeWrapper.theRecipe.outputFluidStack);
+        }
+
+
     }
 }

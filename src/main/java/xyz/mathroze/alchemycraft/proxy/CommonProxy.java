@@ -14,11 +14,6 @@ public class CommonProxy {
 
     }
 
-    public void registerTileEntities() {
-        Log.verbose("Registering Tile Entity: " + TileEntityAlchemicBasin.TILE_ENTITY_ID);
-        GameRegistry.registerTileEntity(TileEntityAlchemicBasin.class, TileEntityAlchemicBasin.TILE_ENTITY_ID);
-    }
-
     public void registerPlugins() {
         Waila.register();
     }

@@ -6,8 +6,6 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -16,89 +14,30 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import xyz.mathroze.alchemycraft.References;
-import xyz.mathroze.alchemycraft.items.ItemPhilosophersStone;
-import xyz.mathroze.alchemycraft.network.AlchemyCraftPacketHandler;
-import xyz.mathroze.alchemycraft.network.UpdateAlchemicBasinMessage;
-import xyz.mathroze.alchemycraft.rituals.Ritual;
-import xyz.mathroze.alchemycraft.rituals.RitualFactory;
 import xyz.mathroze.alchemycraft.utils.Log;
-
-import java.util.Random;
 
 /**
  * Created by caleb on 5/16/17.
  */
-public class TileEntityAlchemicBasin extends TileEntity implements ITickable, ICapabilityProvider {
+public class TileEntityAlchemicBasin extends TileEntity implements ICapabilityProvider {
 
     public static final String TILE_ENTITY_ID = References.MOD_ID + ":alchemicBasin";
     public static final int CAPACITY = 10000;
     private static String NBT_PROGRESS = "Progress";
     private static String NBT_TANK = "Tank";
-    private static Random rand = new Random();
 
     public FluidTank fluidTank;
     private int progress;
-    private Ritual ritual;
 
     public TileEntityAlchemicBasin() {
         this.progress = 0;
         this.fluidTank = new FluidTank(CAPACITY);
-        this.ritual = RitualFactory.getRitual(null);
-    }
-
-    @Override
-    public void update() {
-        if (ritual.canProceed(fluidTank.getFluid())) {
-            ///// Ritual is proceeding /////
-
-            progress = (progress + 1) % ritual.getTransformationTicks();
-            spawnParticles((float) progress / ritual.getTransformationTicks());
-            fluidTank.drain(ritual.getDrainAmount(), true);
-
-            if (progress == 0) {
-                ///// Ritual finished /////
-
-                world.setBlockState(pos.up(), ritual.getEndBlockResult().getDefaultState());
-                if (!ritual.isBlockInfusion())
-                    fluidTank.setFluid(new FluidStack(ritual.getEndFluidResult(), fluidTank.getFluidAmount()));
-                ritual = RitualFactory.getRitual(null);
-                if (!world.isRemote)
-                    AlchemyCraftPacketHandler.INSTANCE.sendToAllAround(
-                            new UpdateAlchemicBasinMessage(fluidTank.getFluid(), pos),
-                            new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 128)
-                    );
-            }
-            markDirty();
-
-        } else if (progress != 0) {
-            ///// Ritual was cancelled /////
-
-            progress = 0;
-            ritual = RitualFactory.getRitual(null);
-            markDirty();
-        } else {
-            ///// No ritual /////
-
-        }
     }
 
     public void interact(EntityPlayer player, World world, BlockPos pos) {
-        ///// Attempting to start a ritual /////
-        Log.verbose("Checking for Philosophers Stone");
-        if (player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() instanceof ItemPhilosophersStone) {
-            Log.verbose("Found one! Getting ritual for: " + world.getBlockState(pos.down()).getBlock().getUnlocalizedName());
-            ritual = RitualFactory.getRitual(world.getBlockState(pos.down()).getBlock());
-            ritual.setPosition(pos, world);
-            progress = 0;
-            if (!ritual.canProceed(fluidTank.getFluid()))
-                ritual = RitualFactory.getRitual(null);
-            return;
-        }
-
         ///// Interacting with Tank /////
         Log.verbose("Checking for capability");
         IFluidHandler capability;
@@ -206,34 +145,7 @@ public class TileEntityAlchemicBasin extends TileEntity implements ITickable, IC
         return nbt;
     }
 
-    private void spawnParticles(float progressPercentage) {
-        double particles = Math.max(progressPercentage * 3, 1.0);
-        particles *= particles;
-        for (int i = 0; i < particles; i ++) {
-            float xOffset = rand.nextFloat() * 3 - 1.5f;
-            float zOffset = rand.nextFloat() * 3 - 1.5f;
-            float yOffset = rand.nextFloat() * 3 - 1.5f;
-            world.spawnParticle(
-                    EnumParticleTypes.ENCHANTMENT_TABLE,
-                    pos.getX() + 0.5,
-                    pos.getY() + 1 + yOffset,
-                    pos.getZ() + 0.5,
-                    xOffset * (1 + progressPercentage),
-                    0,
-                    zOffset * (1 + progressPercentage)
-            );
-        }
-    }
-
     private int remainingCapacity() {
         return CAPACITY - fluidTank.getFluidAmount();
-    }
-
-    public float ritualProgress() {
-        return ((float)progress / ritual.getTransformationTicks()) * 100;
-    }
-
-    public boolean ritualInProgress() {
-        return progress != 0;
     }
 }
